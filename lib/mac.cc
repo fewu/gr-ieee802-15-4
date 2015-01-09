@@ -68,12 +68,13 @@ void mac_in(pmt::pmt_t msg) {
 	// char* dblob = (char*) pmt::blob_data(blob);
 	// int dlen = pmt::blob_length(blob);
 	// for(int i=0; i<dlen; i++)
-	// 	dout << int(dblob[i]);
+	// 	dout << char(dblob[i]);
 	// dout << std::endl;
 
 	size_t data_len = pmt::blob_length(blob);
-	if(data_len < 11) {
-		dout << "MAC: frame too short. Dropping!" << std::endl;
+	std::cout << "MAC packet received has length " << data_len << std::endl;
+	if(data_len != 5) {
+		dout << "MAC: frame has not length 5. Dropping!" << std::endl;
 		return;
 	}
 
@@ -88,8 +89,8 @@ void mac_in(pmt::pmt_t msg) {
 		dout << "MAC: correct crc. Propagate packet to APP layer." << std::endl;
 	}
 
-	pmt::pmt_t mac_payload = pmt::make_blob((char*)pmt::blob_data(blob) + 9 , data_len - 9 - 2);
-
+	// pmt::pmt_t mac_payload = pmt::make_blob((char*)pmt::blob_data(blob) + 9 , data_len - 9 - 2);
+	pmt::pmt_t mac_payload = pmt::make_blob((char*)pmt::blob_data(blob) , 3);
 	message_port_pub(pmt::mp("app out"), pmt::cons(pmt::PMT_NIL, mac_payload));
 }
 
@@ -108,12 +109,15 @@ void app_in(pmt::pmt_t msg) {
 		return;
 	}
 
-	dout << "MAC: received new message from APP of length " << pmt::blob_length(blob) << std::endl;
+	// dout << "MAC: received new message from APP of length " << pmt::blob_length(blob) << std::endl;
 
-	generate_mac((const char*)pmt::blob_data(blob), pmt::blob_length(blob));
-	print_message();
-	message_port_pub(pmt::mp("pdu out"), pmt::cons(pmt::PMT_NIL,
-			pmt::make_blob(d_msg, d_msg_len)));
+	// generate_mac((const char*)pmt::blob_data(blob), pmt::blob_length(blob));
+	// print_message();
+	char frame[5];
+	generate_mac(frame, 5);
+	pmt::pmt_t mac_msg = pmt::cons(pmt::PMT_NIL, pmt::make_blob(frame, 5));
+	std::cout << "MAC packet sent has length " << pmt::blob_length(pmt::cdr(mac_msg)) << std::endl;
+	message_port_pub(pmt::mp("pdu out"), mac_msg);
 }
 
 uint16_t crc16(char *buf, int len) {
@@ -134,35 +138,43 @@ uint16_t crc16(char *buf, int len) {
 	return crc;
 }
 
-void generate_mac(const char *buf, int len) {
+void generate_mac(char *buf, int len) {
 
-	// FCF
-	// data frame, no security
-	d_msg[0] = 0x41;
-	d_msg[1] = 0x88;
+	// // FCF
+	// // data frame, no security
+	// d_msg[0] = 0x41;
+	// d_msg[1] = 0x88;
 
-	// seq nr
-	d_msg[2] = d_seq_nr++;
+	// // seq nr
+	// d_msg[2] = d_seq_nr++;
 
-	// addr info
-	d_msg[3] = 0xcd;
-	d_msg[4] = 0xab;
-	d_msg[5] = 0xff;
-	d_msg[6] = 0xff;
-	d_msg[7] = 0x40;
-	d_msg[8] = 0xe8;
+	// // addr info
+	// d_msg[3] = 0xcd;
+	// d_msg[4] = 0xab;
+	// d_msg[5] = 0xff;
+	// d_msg[6] = 0xff;
+	// d_msg[7] = 0x40;
+	// d_msg[8] = 0xe8;
 
-	std::memcpy(d_msg + 9, buf, len);
+	// std::memcpy(d_msg + 9, buf, len);
 
-	uint16_t crc = crc16(d_msg, len + 9);
+	// uint16_t crc = crc16(d_msg, len + 9);
 
-	d_msg[ 9 + len] = crc & 0xFF;
-	d_msg[10 + len] = crc >> 8;
+	// d_msg[ 9 + len] = crc & 0xFF;
+	// d_msg[10 + len] = crc >> 8;
 
-	d_msg_len = 9 + len + 2;
+	// d_msg_len = 9 + len + 2;
 
-	// dout << std::dec << "msg len " << d_msg_len <<
-	//         "    len " << len << std::endl;
+	// // dout << std::dec << "msg len " << d_msg_len <<
+	// //         "    len " << len << std::endl;
+
+	// simulate an ACK packet (2 byte FCF (random), 1 byte sequence number (random), 2 byte FCS)
+	buf[0] = 'A';
+	buf[1] = 'C';
+	buf[2] = 'K';
+	uint16_t crc = crc16(buf, 3);
+	buf[3] = crc & 0xFF;
+	buf[4] = crc >> 8;
 }
 
 void print_message() {
@@ -171,7 +183,33 @@ void print_message() {
 		if(i % 16 == 15) {
 			dout << std::endl;
 		}
-	}
+	}	// // FCF
+	// // data frame, no security
+	// d_msg[0] = 0x41;
+	// d_msg[1] = 0x88;
+
+	// // seq nr
+	// d_msg[2] = d_seq_nr++;
+
+	// // addr info
+	// d_msg[3] = 0xcd;
+	// d_msg[4] = 0xab;
+	// d_msg[5] = 0xff;
+	// d_msg[6] = 0xff;
+	// d_msg[7] = 0x40;
+	// d_msg[8] = 0xe8;
+
+	// std::memcpy(d_msg + 9, buf, len);
+
+	// uint16_t crc = crc16(d_msg, len + 9);
+
+	// d_msg[ 9 + len] = crc & 0xFF;
+	// d_msg[10 + len] = crc >> 8;
+
+	// d_msg_len = 9 + len + 2;
+
+	// // dout << std::dec << "msg len " << d_msg_len <<
+	// //         "    len " << len << std::endl;
 	dout << std::endl;
 }
 

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='ASCII'?>
 <?grc format='1' created='3.7.6'?>
 <flow_graph>
-  <timestamp>Thu Jan  8 10:56:24 2015</timestamp>
+  <timestamp>Fri Jan  9 12:04:30 2015</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -77,6 +77,33 @@
     </param>
     <param>
       <key>value</key>
+      <value>ieee802_15_4.css_phy(phy_packetsize_bytes=5)</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(184, 119)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>id</key>
+      <value>c_orig</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>value</key>
       <value>ieee802_15_4.css_phy(phy_packetsize_bytes=len(text_msg)+15)</value>
     </param>
     <param>
@@ -86,6 +113,33 @@
     <param>
       <key>_coordinate</key>
       <value>(184, 67)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>id</key>
+      <value>text_msg</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>"Hello World! Now supporting CSS and OQPSK!"</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(160, 267)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -113,33 +167,6 @@
     <param>
       <key>_coordinate</key>
       <value>(32, 195)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>id</key>
-      <value>text_msg</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>"Hello World! Now supporting CSS!"</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(160, 267)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2064,101 +2091,6 @@
     </param>
   </block>
   <block>
-    <key>ieee802_15_4_css_phy</key>
-    <param>
-      <key>id</key>
-      <value>ieee802_15_4_css_phy_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>phr</key>
-      <value>c.PHR</value>
-    </param>
-    <param>
-      <key>nbytes_payload</key>
-      <value>c.phy_packetsize_bytes</value>
-    </param>
-    <param>
-      <key>bits_per_cw</key>
-      <value>c.bits_per_symbol</value>
-    </param>
-    <param>
-      <key>codewords</key>
-      <value>c.codewords</value>
-    </param>
-    <param>
-      <key>intlv_seq</key>
-      <value>c.intlv_seq</value>
-    </param>
-    <param>
-      <key>sym_per_frame</key>
-      <value>c.nsym_frame</value>
-    </param>
-    <param>
-      <key>num_subchirps</key>
-      <value>c.n_subchirps</value>
-    </param>
-    <param>
-      <key>chirp_seq</key>
-      <value>c.chirp_seq</value>
-    </param>
-    <param>
-      <key>time_gap_1</key>
-      <value>c.time_gap_1</value>
-    </param>
-    <param>
-      <key>time_gap_2</key>
-      <value>c.time_gap_2</value>
-    </param>
-    <param>
-      <key>len_sub</key>
-      <value>38</value>
-    </param>
-    <param>
-      <key>nzeros_padding</key>
-      <value>c.padded_zeros</value>
-    </param>
-    <param>
-      <key>preamble</key>
-      <value>c.preamble</value>
-    </param>
-    <param>
-      <key>sfd</key>
-      <value>c.SFD</value>
-    </param>
-    <param>
-      <key>nsamp_frame</key>
-      <value>c.nsamp_frame</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(384, 451)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
     <key>wxgui_fftsink2</key>
     <param>
       <key>id</key>
@@ -2352,7 +2284,7 @@
     </param>
     <param>
       <key>debug</key>
-      <value>False</value>
+      <value>True</value>
     </param>
     <param>
       <key>alias</key>
@@ -2395,7 +2327,7 @@
     </param>
     <param>
       <key>period</key>
-      <value>2</value>
+      <value>1</value>
     </param>
     <param>
       <key>alias</key>
@@ -2416,6 +2348,101 @@
     <param>
       <key>_coordinate</key>
       <value>(160, 185)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>ieee802_15_4_css_phy</key>
+    <param>
+      <key>id</key>
+      <value>ieee802_15_4_css_phy_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>phr</key>
+      <value>c.PHR</value>
+    </param>
+    <param>
+      <key>nbytes_payload</key>
+      <value>c.phy_packetsize_bytes</value>
+    </param>
+    <param>
+      <key>bits_per_cw</key>
+      <value>c.bits_per_symbol</value>
+    </param>
+    <param>
+      <key>codewords</key>
+      <value>c.codewords</value>
+    </param>
+    <param>
+      <key>intlv_seq</key>
+      <value>c.intlv_seq</value>
+    </param>
+    <param>
+      <key>sym_per_frame</key>
+      <value>c.nsym_frame</value>
+    </param>
+    <param>
+      <key>num_subchirps</key>
+      <value>c.n_subchirps</value>
+    </param>
+    <param>
+      <key>chirp_seq</key>
+      <value>c.chirp_seq</value>
+    </param>
+    <param>
+      <key>time_gap_1</key>
+      <value>c.time_gap_1</value>
+    </param>
+    <param>
+      <key>time_gap_2</key>
+      <value>c.time_gap_2</value>
+    </param>
+    <param>
+      <key>len_sub</key>
+      <value>38</value>
+    </param>
+    <param>
+      <key>nzeros_padding</key>
+      <value>c.padded_zeros</value>
+    </param>
+    <param>
+      <key>preamble</key>
+      <value>c.preamble</value>
+    </param>
+    <param>
+      <key>sfd</key>
+      <value>c.SFD</value>
+    </param>
+    <param>
+      <key>nsamp_frame</key>
+      <value>c.nsamp_frame</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(400, 451)</value>
     </param>
     <param>
       <key>_rotation</key>

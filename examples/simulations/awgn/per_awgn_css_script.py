@@ -6,7 +6,7 @@
 # Generated: Mon Nov 10 19:00:50 2014
 ##################################################
 
-execfile("/home/wunsch/.grc_gnuradio/ieee802_15_4_css_phy_sd.py")
+execfile("/home/felixwunsch/.grc_gnuradio/ieee802_15_4_css_phy_sd.py")
 from gnuradio import analog
 from gnuradio import blocks
 from gnuradio import eng_notation
@@ -24,10 +24,10 @@ import matplotlib.pyplot as plt
 # configuration parameters
 snr_vals = np.arange(-25.0,-5.0,.5)
 enable_vals = [0.0, 0.0, 0.0]
-nbytes_phy_frame = 1
-nbytes_mac_frame = nbytes_phy_frame + 11
-min_err = 5e2
-min_len = 1e3
+nbytes_phy_frame = 4
+nbytes_mac_frame = nbytes_phy_frame + 2
+min_err = 1e3
+min_len = 2e3
 msg_interval = 2 # ms
 sleeptime = 1.0
 slow_mode = True

@@ -72,11 +72,11 @@ void mac_in(pmt::pmt_t msg) {
 	// dout << std::endl;
 
 	size_t data_len = pmt::blob_length(blob);
-	std::cout << "MAC packet received has length " << data_len << std::endl;
-	if(data_len != 5) {
-		dout << "MAC: frame has not length 5. Dropping!" << std::endl;
-		return;
-	}
+	dout << "MAC packet received has length " << data_len << std::endl;
+	// if(data_len != 5) {
+	// 	dout << "MAC: frame has not length 5. Dropping!" << std::endl;
+	// 	return;
+	// }
 
 	uint16_t crc = crc16((char*)pmt::blob_data(blob), data_len);
 	d_num_packets_received++;
@@ -90,7 +90,7 @@ void mac_in(pmt::pmt_t msg) {
 	}
 
 	// pmt::pmt_t mac_payload = pmt::make_blob((char*)pmt::blob_data(blob) + 9 , data_len - 9 - 2);
-	pmt::pmt_t mac_payload = pmt::make_blob((char*)pmt::blob_data(blob) , 3);
+	pmt::pmt_t mac_payload = pmt::make_blob((char*)pmt::blob_data(blob) , pmt::blob_length(blob)-2);
 	message_port_pub(pmt::mp("app out"), pmt::cons(pmt::PMT_NIL, mac_payload));
 }
 
@@ -109,15 +109,14 @@ void app_in(pmt::pmt_t msg) {
 		return;
 	}
 
-	// dout << "MAC: received new message from APP of length " << pmt::blob_length(blob) << std::endl;
+	dout << "MAC: received new message from APP of length " << pmt::blob_length(blob) << std::endl;
 
-	// generate_mac((const char*)pmt::blob_data(blob), pmt::blob_length(blob));
+	char* app_data = (char*)pmt::blob_data(blob);
+	int app_data_len = pmt::blob_length(blob);
+	generate_mac(app_data, app_data_len);
 	// print_message();
-	char frame[5];
-	generate_mac(frame, 5);
-	pmt::pmt_t mac_msg = pmt::cons(pmt::PMT_NIL, pmt::make_blob(frame, 5));
-	std::cout << "MAC packet sent has length " << pmt::blob_length(pmt::cdr(mac_msg)) << std::endl;
-	message_port_pub(pmt::mp("pdu out"), mac_msg);
+	// std::cout << "MAC packet sent has length " << pmt::blob_length(pmt::cdr(mac_msg)) << std::endl;
+	message_port_pub(pmt::mp("pdu out"), pmt::cons(pmt::PMT_NIL, pmt::make_blob(d_msg, app_data_len+2)));
 }
 
 uint16_t crc16(char *buf, int len) {
@@ -168,13 +167,11 @@ void generate_mac(char *buf, int len) {
 	// // dout << std::dec << "msg len " << d_msg_len <<
 	// //         "    len " << len << std::endl;
 
-	// simulate an ACK packet (2 byte FCF (random), 1 byte sequence number (random), 2 byte FCS)
-	buf[0] = 'A';
-	buf[1] = 'C';
-	buf[2] = 'K';
-	uint16_t crc = crc16(buf, 3);
-	buf[3] = crc & 0xFF;
-	buf[4] = crc >> 8;
+	// just add the FCS to the data
+	std::memcpy(d_msg, buf, len);
+	uint16_t crc = crc16(buf, len);
+	d_msg[len] = crc & 0xFF;
+	d_msg[len+1] = crc >> 8;
 }
 
 void print_message() {
